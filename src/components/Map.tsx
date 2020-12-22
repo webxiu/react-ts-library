@@ -1,6 +1,9 @@
-import echarts, { EChartOption } from "echarts";
-import React, { useEffect, useRef } from "react";
 import "echarts/map/js/china.js";
+import "echarts/map/json/province/jiangxi.json";
+
+import React, { useEffect, useRef, useState } from "react";
+import echarts, { EChartOption, ECharts } from "echarts";
+
 interface Props {}
 const data: { name: string; value: number }[] = [
   { name: "南海诸岛", value: 0 },
@@ -41,6 +44,9 @@ const data: { name: string; value: number }[] = [
 ];
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [selectArea, setSelectArea] = useState<any>();
+  const [echartsInstance, setEchartsInstance] = useState<any>(null);
+
   const option: EChartOption = {
     visualMap: [
       {
@@ -68,7 +74,6 @@ const Map: React.FC<Props> = () => {
     tooltip: {
       show: true,
       formatter: (params: any) => {
-        console.log(params);
         return `${params.name}:${params.value}`;
       },
     },
@@ -82,15 +87,49 @@ const Map: React.FC<Props> = () => {
     ],
   };
 
-  console.log("mapRef.current", mapRef.current);
 
   useEffect(() => {
     if (!mapRef) return;
-    const myChart = echarts.init(
+    const mychart = echarts.init(
       document.getElementById("china") as HTMLDivElement
     );
-    myChart?.setOption(option as any);
-  }, [mapRef]);
+    setEchartsInstance(mychart);
+    echartsInstance?.on("click", (params: any) => {
+      setSelectArea(params);
+    });
+    echartsInstance?.setOption(option as any);
+  }, [mapRef, option]);
+
+  
+
+  //渲染城市地图
+  useEffect(() => {
+    console.log("selectArea", selectArea);
+    const address: any = {
+      安徽: "anhui",
+      江西: "jiangxi",
+    };
+    import(
+      `echarts/map/json/province/${address[selectArea?.name] || 'jiangxi'}.json` as any
+    ).then((geoJson) => {
+      console.log("获取json:", geoJson.default);
+      // echartsInstance?.hideLoading();
+      echarts.registerMap('jiangxi', geoJson.default);
+      const option = {
+        geo: {
+          // map: 'jiangxi',
+          type: 'map',
+          mapType: 'jiangxi',
+          label: { show: true }, //显示省份
+          roam: true, //缩放
+        },
+        series: [], //地图上二开点线特效数组
+      }
+      echartsInstance?.setOption(option)
+    });
+  }, [selectArea]);
+  
+  
 
   return (
     <>
