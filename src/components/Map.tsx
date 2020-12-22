@@ -1,5 +1,5 @@
 import "echarts/map/js/china.js";
-import "echarts/map/json/province/jiangxi.json";
+import "echarts/map/js/province/anhui.js";
 
 import React, { useEffect, useRef, useState } from "react";
 import echarts, { EChartOption, ECharts } from "echarts";
@@ -87,7 +87,6 @@ const Map: React.FC<Props> = () => {
     ],
   };
 
-
   useEffect(() => {
     if (!mapRef) return;
     const mychart = echarts.init(
@@ -100,8 +99,6 @@ const Map: React.FC<Props> = () => {
     echartsInstance?.setOption(option as any);
   }, [mapRef, option]);
 
-  
-
   //渲染城市地图
   useEffect(() => {
     console.log("selectArea", selectArea);
@@ -110,26 +107,54 @@ const Map: React.FC<Props> = () => {
       江西: "jiangxi",
     };
     import(
-      `echarts/map/json/province/${address[selectArea?.name] || 'jiangxi'}.json` as any
-    ).then((geoJson) => {
-      console.log("获取json:", geoJson.default);
+      `echarts/map/js/province/${
+        address[selectArea?.name] || "anhui"
+      }.js` as any
+    ).then((res) => {
+      console.log("res", res);
       // echartsInstance?.hideLoading();
-      echarts.registerMap('jiangxi', geoJson.default);
-      const option = {
-        geo: {
-          // map: 'jiangxi',
-          type: 'map',
-          mapType: 'jiangxi',
-          label: { show: true }, //显示省份
-          roam: true, //缩放
+      const option1: EChartOption = {
+        visualMap: [
+          {
+            dimension: 0,
+            inRange: {
+              color: [
+                "#fff",
+                "#4575b4",
+                "#74add1",
+                "#f46d43",
+                "#d73027",
+                "#a50026",
+              ],
+            },
+            pieces: [
+              { min: 10000, label: "10000以上" },
+              { min: 5000, max: 10000, label: "5000-10000" },
+              { min: 1000, max: 5000, label: "1000-5000" },
+              { min: 100, max: 1000, label: "100-1000" },
+              { min: 0, max: 100, label: "100以下" },
+            ],
+            show: true,
+          },
+        ],
+        tooltip: {
+          show: true,
+          formatter: (params: any) => {
+            return `${params.name}:${params.value}`;
+          },
         },
-        series: [], //地图上二开点线特效数组
-      }
-      echartsInstance?.setOption(option)
+        series: [
+          {
+            name: "标题==",
+            type: "map",
+            map: selectArea?.name,
+            data,
+          },
+        ],
+      };
+      echartsInstance?.setOption(option1);
     });
   }, [selectArea]);
-  
-  
 
   return (
     <>
