@@ -7,6 +7,17 @@ import echarts, { EChartOption, ECharts } from "echarts";
 import { Button } from "antd";
 import china from "../assets/map/china.json";
 
+const com = () => {
+  return (
+    <div>
+      <p>333333</p>
+      <p>333333</p>
+      <p>333333</p>
+      <p>333333</p>
+    </div>
+  );
+};
+
 console.log("china", china);
 
 interface Props {}
@@ -50,7 +61,50 @@ const data: { name: string; value: number }[] = [
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
-  const option: EChartOption = {
+  const option: EChartOption | any = {
+    layoutCenter: ["40%", "50%"], //图标平移位置
+    layoutSize: "50%", //缩放大小
+    title: {
+      text: "主要的标题",
+      subtext: "子标题",
+      left: "40%",
+      top: "50",
+      right: "auto",
+      bottom: "auto",
+      textAlign: "center", // 标题居中
+    },
+    toolbox: {
+      feature: {
+        myTool1: {
+          show: true,
+          title: "自定义扩展方法1",
+          icon: "image://http://echarts.baidu.com/images/favicon.png",
+          onclick: function () {
+            alert("myToolHandler1");
+          },
+        },
+      },
+    },
+    graphic: {
+      elements: [
+        {
+          type: "text",
+          right: 100,
+          top: 200,
+          z: -10,
+          style: {
+            text: [
+              "自定义文字自定义文字",
+              "自定义文字自定义文字",
+              "自定义文字自定义文字",
+              "自定义文字自定义文字",
+              "自定义文字",
+            ].join("\n"),
+            font: "14px Microsoft YaHei",
+          },
+        },
+      ],
+    },
     visualMap: [
       {
         dimension: 0,
@@ -76,16 +130,33 @@ const Map: React.FC<Props> = () => {
     ],
     tooltip: {
       show: true,
+      backgroundColor: "#f00", //提示标签背景颜色
+      textStyle: { color: "#fff" }, //提示标签字体颜色
       formatter: (params: any) => {
         return `${params.name}:${params.value}`;
       },
     },
+
+    // 可以为一个函数返回
     series: [
       {
         name: "标题==",
         type: "map",
         map: "china",
         data,
+        zoom: 2,
+        itemStyle: {
+          normal: {
+            borderWidth: 1, //区域边框宽度
+            borderColor: "#ccc", //区域边框颜色
+            areaColor: "#f60", //区域颜色
+          },
+          emphasis: {
+            borderWidth: 1, // 区域hover线宽
+            borderColor: "#f60", // 区域hover线颜色
+            areaColor: "#0f0", // 区域hover背景颜色
+          },
+        },
       },
     ],
   };
@@ -98,6 +169,7 @@ const Map: React.FC<Props> = () => {
     setEchartsInstance(mychart);
     echartsInstance?.on("click", (params: any) => {
       console.log("params", params);
+
       if (params?.name in province) {
         const city = province[params?.name];
         const option1: EChartOption = {
@@ -189,6 +261,13 @@ const Map: React.FC<Props> = () => {
 
   /** 获取省市 */
   const getCity = (url: string, params: any, option: EChartOption) => {
+    echartsInstance.showLoading({
+      text: "加载中",
+      color: "rgba(145,213,255,0.85)", //设置转圈圈字体颜色
+      textColor: "rgba(145,213,255,0.85)", //设置文字字体颜色
+      maskColor: "rgba(36, 102, 175, 0.05)",
+      zlevel: 0,
+    });
     import(`../assets/map/${url}.json`).then((geoJson) => {
       console.log("geoJson", geoJson);
       echartsInstance?.hideLoading();
@@ -206,7 +285,7 @@ const Map: React.FC<Props> = () => {
       <div
         id="china"
         ref={mapRef}
-        style={{ width: "100%", height: "600px" }}
+        style={{ width: "100%", height: "600px", border: "1px solid #ccc" }}
       ></div>
     </>
   );
