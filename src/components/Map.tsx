@@ -1,50 +1,14 @@
 import "echarts/map/js/china.js";
 
 import React, { useEffect, useRef, useState } from "react";
+import { cityCode, province } from "../data/cityMap";
 import echarts, { EChartOption, ECharts } from "echarts";
 
 import { Button } from "antd";
+import china from "../assets/map/china.json";
 
-interface ProvinceType {
-  [index: string]: string;
-}
+console.log("china", china);
 
-const province: ProvinceType = {
-  北京: "beijing",
-  上海: "shanghai",
-  天津: "tianjin",
-  重庆: "chongqing",
-  香港: "xianggang",
-  澳门: "aomen",
-  安徽: "anhui",
-  福建: "fujian",
-  广东: "guangdong",
-  广西: "guangxi",
-  贵州: "guizhou",
-  甘肃: "gansu",
-  海南: "hainan",
-  河北: "hebei",
-  河南: "henan",
-  黑龙江: "heilongjiang",
-  湖北: "hubei",
-  湖南: "hunan",
-  吉林: "jilin",
-  江苏: "jiangsu",
-  江西: "jiangxi",
-  辽宁: "liaoning",
-  内蒙古: "neimenggu",
-  宁夏: "ningxia",
-  青海: "qinghai",
-  陕西: "shanxi",
-  山西: "shanxi",
-  山东: "shandong",
-  四川: "sichuan",
-  台湾: "taiwan",
-  西藏: "xizang",
-  新疆: "xinjiang",
-  云南: "yunnan",
-  浙江: "zhejiang",
-};
 interface Props {}
 const data: { name: string; value: number }[] = [
   { name: "南海诸岛", value: 0 },
@@ -86,7 +50,6 @@ const data: { name: string; value: number }[] = [
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
-
   const option: EChartOption = {
     visualMap: [
       {
@@ -135,48 +98,91 @@ const Map: React.FC<Props> = () => {
     setEchartsInstance(mychart);
     echartsInstance?.on("click", (params: any) => {
       console.log("params", params);
-      const city = province[params?.name];
-
-      const option1: EChartOption = {
-        visualMap: [
-          {
-            dimension: 0,
-            inRange: {
-              color: [
-                "#fff",
-                "#4575b4",
-                "#74add1",
-                "#f46d43",
-                "#d73027",
-                "#a50026",
+      if (params?.name in province) {
+        const city = province[params?.name];
+        const option1: EChartOption = {
+          visualMap: [
+            {
+              dimension: 0,
+              inRange: {
+                color: [
+                  "#fff",
+                  "#4575b4",
+                  "#74add1",
+                  "#f46d43",
+                  "#d73027",
+                  "#a50026",
+                ],
+              },
+              pieces: [
+                { min: 10000, label: "10000以上" },
+                { min: 5000, max: 10000, label: "5000-10000" },
+                { min: 1000, max: 5000, label: "1000-5000" },
+                { min: 100, max: 1000, label: "100-1000" },
+                { min: 0, max: 100, label: "100以下" },
               ],
+              show: true,
             },
-            pieces: [
-              { min: 10000, label: "10000以上" },
-              { min: 5000, max: 10000, label: "5000-10000" },
-              { min: 1000, max: 5000, label: "1000-5000" },
-              { min: 100, max: 1000, label: "100-1000" },
-              { min: 0, max: 100, label: "100以下" },
-            ],
+          ],
+          tooltip: {
             show: true,
+            formatter: (params: any) => {
+              return `${params.name}:${params.value}`;
+            },
           },
-        ],
-        tooltip: {
-          show: true,
-          formatter: (params: any) => {
-            return `${params.name}:${params.value}`;
+          series: [
+            {
+              name: "标题==",
+              type: "map",
+              map: params?.name,
+              data,
+            },
+          ],
+        };
+        getCity(`province/${city}`, params, option1);
+      } else if (params?.name in cityCode) {
+        const code = cityCode[params?.name];
+        const option2: EChartOption = {
+          visualMap: [
+            {
+              dimension: 0,
+              inRange: {
+                color: [
+                  "#fff",
+                  "#4575b4",
+                  "#74add1",
+                  "#f46d43",
+                  "#d73027",
+                  "#a50026",
+                ],
+              },
+              pieces: [
+                { min: 10000, label: "10000以上" },
+                { min: 5000, max: 10000, label: "5000-10000" },
+                { min: 1000, max: 5000, label: "1000-5000" },
+                { min: 100, max: 1000, label: "100-1000" },
+                { min: 0, max: 100, label: "100以下" },
+              ],
+              show: true,
+            },
+          ],
+          tooltip: {
+            show: true,
+            formatter: (params: any) => {
+              return `${params.name}:${params.value}`;
+            },
           },
-        },
-        series: [
-          {
-            name: "标题==",
-            type: "map",
-            map: params?.name,
-            data,
-          },
-        ],
-      };
-      getCity(`province/${city}`, params, option1);
+          series: [
+            {
+              name: "标题==",
+              type: "map",
+              map: params?.name,
+              data,
+            },
+          ],
+        };
+        getCity(`city/${code}`, params, option2);
+      }
     });
     echartsInstance?.setOption(option as any);
   }, [mapRef, option]);
