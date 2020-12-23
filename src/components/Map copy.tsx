@@ -1,50 +1,11 @@
 import "echarts/map/js/china.js";
+import "../assets/map/china.json";
 
 import React, { useEffect, useRef, useState } from "react";
 import echarts, { EChartOption, ECharts } from "echarts";
 
 import { Button } from "antd";
 
-interface ProvinceType {
-  [index: string]: string;
-}
-
-const province: ProvinceType = {
-  北京: "beijing",
-  上海: "shanghai",
-  天津: "tianjin",
-  重庆: "chongqing",
-  香港: "xianggang",
-  澳门: "aomen",
-  安徽: "anhui",
-  福建: "fujian",
-  广东: "guangdong",
-  广西: "guangxi",
-  贵州: "guizhou",
-  甘肃: "gansu",
-  海南: "hainan",
-  河北: "hebei",
-  河南: "henan",
-  黑龙江: "heilongjiang",
-  湖北: "hubei",
-  湖南: "hunan",
-  吉林: "jilin",
-  江苏: "jiangsu",
-  江西: "jiangxi",
-  辽宁: "liaoning",
-  内蒙古: "neimenggu",
-  宁夏: "ningxia",
-  青海: "qinghai",
-  陕西: "shanxi",
-  山西: "shanxi",
-  山东: "shandong",
-  四川: "sichuan",
-  台湾: "taiwan",
-  西藏: "xizang",
-  新疆: "xinjiang",
-  云南: "yunnan",
-  浙江: "zhejiang",
-};
 interface Props {}
 const data: { name: string; value: number }[] = [
   { name: "南海诸岛", value: 0 },
@@ -85,6 +46,7 @@ const data: { name: string; value: number }[] = [
 ];
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [selectArea, setSelectArea] = useState<any>();
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
 
   const option: EChartOption = {
@@ -134,9 +96,57 @@ const Map: React.FC<Props> = () => {
     );
     setEchartsInstance(mychart);
     echartsInstance?.on("click", (params: any) => {
-      console.log("params", params);
-      const city = province[params?.name];
+      setSelectArea(params);
+    });
+    echartsInstance?.setOption(option as any);
+  }, [mapRef, option]);
 
+  //渲染城市地图
+  useEffect(() => {
+    console.log("selectArea", selectArea);
+    const address: any = {
+      北京: "BeiJing",
+      上海: "ShangHai",
+      天津: "TianJin",
+      重庆: "ChongQing",
+      香港: "XiangGang",
+      澳门: "Aomen",
+      安徽: "AnHui",
+      福建: "FuJian",
+      广东: "GuangDong",
+      广西: "GuangXi",
+      贵州: "GuiZhou",
+      甘肃: "GanSu",
+      海南: "HaiNan",
+      河北: "HeBei",
+      河南: "HeNan",
+      黑龙江: "HeiLongJiang",
+      湖北: "HuBei",
+      湖南: "HuNan",
+      吉林: "JiLin",
+      江苏: "JiangSu",
+      江西: "JiangXi",
+      辽宁: "LiaoNing",
+      内蒙古: "NeiMengGu",
+      宁夏: "NingXia",
+      青海: "QingHai",
+      陕西: "ShanXi",
+      山西: "ShanXi",
+      山东: "ShanDong",
+      四川: "SiChuan",
+      台湾: "TaiWan",
+      西藏: "XiZang",
+      新疆: "XinJiang",
+      云南: "YunNan",
+      浙江: "ZheJiang",
+    };
+    import(
+      `echarts/map/js/province/${
+        address[selectArea?.name]?.toLowerCase() || "beijing"
+      }.js` as any
+    ).then((res) => {
+      console.log("res", res);
+      // echartsInstance?.hideLoading();
       const option1: EChartOption = {
         visualMap: [
           {
@@ -171,25 +181,14 @@ const Map: React.FC<Props> = () => {
           {
             name: "标题==",
             type: "map",
-            map: params?.name,
+            map: selectArea?.name,
             data,
           },
         ],
       };
-      getCity(`province/${city}`, params, option1);
+      echartsInstance?.setOption(option1);
     });
-    echartsInstance?.setOption(option as any);
-  }, [mapRef, option]);
-
-  /** 获取省市 */
-  const getCity = (url: string, params: any, option: EChartOption) => {
-    import(`../assets/map/${url}.json`).then((geoJson) => {
-      console.log("geoJson", geoJson);
-      echartsInstance?.hideLoading();
-      echarts?.registerMap(params?.name, geoJson.default);
-      echartsInstance?.setOption(option);
-    });
-  };
+  }, [selectArea]);
 
   const goback = () => {
     echartsInstance?.setOption(option as any);
