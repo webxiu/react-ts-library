@@ -7,6 +7,7 @@ import Home from "./pages/home";
 import Map from "./components/Map";
 import MapBar from "./components/MapBar";
 import MapPie from "./components/MapPie";
+import MapLine from "./components/MapLine";
 
 // import BaseRouter from "./router";
 
@@ -19,6 +20,7 @@ const App: FC = () => (
       <Map />
       <MapBar />
       <MapPie />
+      <MapLine />
     </Home>
     {/* <Router history={history}>
       <Switch>

@@ -90,7 +90,7 @@ const Map: React.FC<Props> = () => {
         rich: rich,
       },
       formatter: function (name: any) {
-        console.log("name==", name);
+        // console.log("name==", name);
         let str: string = "";
         dataPie.forEach((item: any, i: number) => {
           if (item.name === name) {
