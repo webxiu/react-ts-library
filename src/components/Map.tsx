@@ -56,7 +56,7 @@ const data: { name: string; value: number }[] = [
   { name: "海南", value: 800 },
   { name: "台湾", value: 54 },
   { name: "香港", value: 70 },
-  { name: "澳门", value: 2 },
+  { name: "澳门", value: 33333 },
 ];
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -144,6 +144,7 @@ const Map: React.FC<Props> = () => {
         type: "map",
         map: "china",
         data,
+        roam: true,
         zoom: 2,
         itemStyle: {
           normal: {

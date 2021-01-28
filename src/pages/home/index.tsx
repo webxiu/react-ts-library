@@ -9,7 +9,7 @@ import { Button, Menu } from "antd";
 
 import React from "react";
 import routes from "../../router/config";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 console.log("routes", routes);
 
@@ -18,8 +18,8 @@ const { SubMenu } = Menu;
 interface Props {}
 
 const Home: React.FC<Props> = (props) => {
-    // const history = useHistory();
-    // const location = history.location;
+  // const history = useHistory();
+  // const location = history.location;
 
   // submenu keys of first level
   const rootSubmenuKeys = ["sub1", "sub2", "sub4"];
@@ -38,7 +38,7 @@ const Home: React.FC<Props> = (props) => {
   // 菜单渲染
   const renderMenu = (data: any) => {
     // let path = history.location.pathname;
-    let path = '';
+    let path = "";
     return data.map((item: any) => {
       if (item.children) {
         const cItem = item.children.find((cItem: any) => cItem.key === path);
@@ -109,8 +109,8 @@ const Home: React.FC<Props> = (props) => {
         </SubMenu> */}
       </Menu>
       <div className="content">
-          {props.children}
-          <Button type="primary">Button</Button>
+        {props.children}
+        <Button type="primary">Button</Button>
       </div>
     </div>
   );
