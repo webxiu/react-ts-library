@@ -1,39 +1,87 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import "./index.less";
 
-import Form from "../pages/form";
-import Home from "../pages/home";
-import NotFound from "../pages/notFound";
+import { Button, Menu } from "antd";
+
 import React from "react";
-import Table from "../pages/table";
+import routes from "./config";
+import { useHistory } from "react-router";
 
-const BaseRouter = () => {
+console.log("routes", routes);
+
+const { SubMenu } = Menu;
+
+interface Props {}
+
+const Wrap: React.FC<Props> = (props) => {
+  const history = useHistory();
+
+  // submenu keys of first level
+  const rootSubmenuKeys = ["sub1", "sub2", "sub4"];
+
+  const [openKeys, setOpenKeys] = React.useState(["sub1"]);
+
+  const onOpenChange = (keys: any) => {
+    const latestOpenKey = keys.find((key: any) => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
+
+  // 菜单渲染
+  const renderMenu = (data: any) => {
+    let path = "";
+    return data.map((item: any) => {
+      if (item.children) {
+        const cItem = item.children.find((cItem: any) => cItem.key === path);
+        if (cItem) {
+          setOpenKeys(item.key); // 把openKey存在this种
+        }
+        return (
+          <SubMenu
+            key={item.key}
+            title={
+              <span>
+                <item.icon type={item.icon} />
+                <span>{item.title}</span>
+              </span>
+            }
+          >
+            {renderMenu(item.children)}
+          </SubMenu>
+        );
+      }
+      // 判断item是否是当前对应的item
+      // if (item.key === path || path.indexOf(item.key) ===0) { //存在二季子路由判断
+
+      return (
+        <Menu.Item title={item.title} key={item.key}>
+          <span
+            key={item.key}
+            onClick={() => {
+              history.push(item.key);
+            }}
+          >
+            <item.icon type={item.icon} />
+            <span> {item.title}</span>
+          </span>
+        </Menu.Item>
+      );
+    });
+  };
   return (
-    // <Router>
-    <Switch>
-      <Route path="/form" component={Form} />
-      <Route path="/table" component={Table} />
-      {/* <Route path="/login" component={Table} />
-      <Route path="/order/detail" component={Table} /> */}
-      {/* /根目录 放最下面 */}
-      <Route
-        path="/"
-        render={() => (
-          <Home>
-            <Switch>
-              <Route path="/ui/:id" component={Table} />
-              <Redirect exact={true} from="/" to="/home" />
-              <Route path="/home" component={Table} />
-              <Route path="/ui/button" component={Table} />
-              <Route path="/form" component={Form} />
-              <Route path="/table" component={Table} />
-              <Route component={NotFound} />
-            </Switch>
-          </Home>
-        )}
-      />
-    </Switch>
-    // </Router>
+    <div className="container">
+      <Menu
+        mode="inline"
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
+        style={{ width: 256 }}
+      >
+        {renderMenu(routes)}
+      </Menu>
+      <div className="content">{props.children}</div>
+    </div>
   );
 };
-
-export default BaseRouter;
+export default Wrap;

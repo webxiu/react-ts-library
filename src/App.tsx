@@ -1,33 +1,45 @@
 import "./App.less";
 
 import React, { FC } from "react";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import { Button } from "antd";
+import Form from "./pages/form";
 import Home from "./pages/home";
-import Map from "./components/Map";
-import MapBar from "./components/MapBar";
-import MapPie from "./components/MapPie";
-import MapLine from "./components/MapLine";
+import MenuRouter from "./router";
+import Message from "./pages/message";
+import NotFound from "./pages/notFound";
+import Permission from "./pages/permission";
+import Person from "./pages/person";
+import { Redirect } from "react-router";
+import Role from "./pages/role";
+import Table from "./pages/table";
 
-// import BaseRouter from "./router";
-
-// import Map from "./components/Map";
-// import MyTable from "./components/MyTable";
-
-const App: FC = () => (
-  <div className="App">
-    <Home>
-      <Map />
-      <MapBar />
-      <MapPie />
-      <MapLine />
-    </Home>
-    {/* <Router history={history}>
+const App: FC = () => {
+  return (
+    <Router>
       <Switch>
-        <Route path="/form" component={Form} />
+        <Route path="/person" component={Person} />
+        <MenuRouter>
+          {/* /根目录 放最下面 */}
+          <Route
+            path="/"
+            render={() => (
+              <Switch>
+                <Redirect exact={true} from="/" to="/home" />
+                <Route path="/home" component={Home} />
+                <Route path="/table" component={Table} />
+                <Route path="/form" component={Form} />
+                <Route path="/role" component={Role} />
+                <Route path="/mssage" component={Message} />
+                <Route path="/permission" component={Permission} />
+                <Route component={NotFound} />
+              </Switch>
+            )}
+          />
+        </MenuRouter>
       </Switch>
-    </Router> */}
-  </div>
-);
+    </Router>
+  );
+};
 
 export default App;

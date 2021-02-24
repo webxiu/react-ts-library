@@ -56,7 +56,7 @@ const data: { name: string; value: number }[] = [
   { name: "海南", value: 800 },
   { name: "台湾", value: 54 },
   { name: "香港", value: 70 },
-  { name: "澳门", value: 33333 },
+  { name: "澳门", value: 2 },
 ];
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -137,6 +137,31 @@ const Map: React.FC<Props> = () => {
       },
     },
 
+    geo:{
+      zoom: 1,
+      nameProperty: 'name' ,
+      nameMap:{
+        'aomen':'澳门',
+        zoom: 5,
+      },
+      itemStyle:{
+        label:{
+          show: true
+        },
+      },
+      regions: [{
+        name: '澳门',
+        itemStyle: {
+            areaColor: 'red',
+            color: 'red'
+        },
+        label:{
+          show: true
+        },
+        zoom: 5,
+    }],
+    },
+
     // 可以为一个函数返回
     series: [
       {
@@ -144,8 +169,8 @@ const Map: React.FC<Props> = () => {
         type: "map",
         map: "china",
         data,
-        roam: true,
         zoom: 2,
+        roam: true,
         itemStyle: {
           normal: {
             borderWidth: 1, //区域边框宽度

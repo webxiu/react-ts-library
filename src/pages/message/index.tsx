@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Wrap = () => {
+const Form = () => {
     return (
         <div>
-            Form
+            Message
         </div>
     )
 }
 
-export default Wrap
+export default Form
