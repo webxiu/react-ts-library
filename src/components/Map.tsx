@@ -109,14 +109,7 @@ const Map: React.FC<Props> = () => {
       {
         dimension: 0,
         inRange: {
-          color: [
-            "#fff",
-            "#4575b4",
-            "#74add1",
-            "#f46d43",
-            "#d73027",
-            "#a50026",
-          ],
+          color: [ "#0f0", "#4575b4", "#74add1", "#f46d43", "#00f"],
         },
         pieces: [
           { min: 10000, label: "10000以上" },
@@ -133,42 +126,57 @@ const Map: React.FC<Props> = () => {
       backgroundColor: "#f00", //提示标签背景颜色
       textStyle: { color: "#fff" }, //提示标签字体颜色
       formatter: (params: any) => {
-        return `${params.name}:${params.value}`;
+        console.log("地图数据", params);
+        const data = params.data;
+        if (data) {
+          return `${data.name} <br />
+            塔机: ${data.taji} <br />
+            送货电梯: ${data.dianti} <br />
+          `;
+        } else {
+          return "暂无数据";
+        }
       },
     },
-
-    geo:{
+    geo: {
       zoom: 1,
-      nameProperty: 'name' ,
-      nameMap:{
-        'aomen':'澳门',
+      nameProperty: "name",
+      nameMap: {
+        aomen: "澳门",
         zoom: 5,
       },
-      itemStyle:{
-        label:{
-          show: true
+      itemStyle: {
+        label: {
+          show: true,
         },
       },
-      regions: [{
-        name: '澳门',
-        itemStyle: {
-            areaColor: 'red',
-            color: 'red'
+      regions: [
+        {
+          name: "澳门",
+          itemStyle: {
+            areaColor: "red",
+            color: "red",
+          },
+          label: {
+            show: true,
+          },
+          zoom: 5,
         },
-        label:{
-          show: true
-        },
-        zoom: 5,
-    }],
+      ],
     },
-
     // 可以为一个函数返回
     series: [
       {
         name: "标题==",
         type: "map",
         map: "china",
-        data,
+        data: [
+          { name: "新疆", value: 463, taji: 755, dianti: 254 },
+          { name: "江苏", value: 899, taji: 1111, dianti: 111 },
+          { name: "浙江", value: 300, taji: 222, dianti: 222 },
+          { name: "江西", value: 2689, taji: 333, dianti: 333 },
+          { name: "湖北", value: 86285, taji: 444, dianti: 444 },
+        ],
         zoom: 2,
         roam: true,
         itemStyle: {

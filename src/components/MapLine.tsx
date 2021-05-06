@@ -137,7 +137,7 @@ const Map: React.FC<Props> = () => {
         },
         textStyle: {
           fontSize: 14,
-          lineHeight: '20',
+          lineHeight: "20",
           color: "#ddd",
         },
         fillerColor: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
@@ -195,9 +195,7 @@ const Map: React.FC<Props> = () => {
 
   useEffect(() => {
     if (!mapRef) return;
-    const mychart = echarts.init(
-      document.getElementById("aline") as HTMLDivElement
-    );
+    const mychart = echarts.init(mapRef.current as HTMLDivElement);
     setEchartsInstance(mychart);
     echartsInstance?.on("click", (params: any) => {
       console.log("params", params);
@@ -207,7 +205,6 @@ const Map: React.FC<Props> = () => {
 
   return (
     <div
-      id="aline"
       ref={mapRef}
       style={{ width: "100%", height: "600px", border: "1px solid #ccc" }}
     ></div>
