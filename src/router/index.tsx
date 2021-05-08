@@ -60,6 +60,7 @@ const Wrap: React.FC<Props> = (props) => {
           <span
             key={item.key}
             onClick={() => {
+              console.log("item.key", item.key);
               history.push(item.key);
             }}
           >

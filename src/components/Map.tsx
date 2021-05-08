@@ -109,7 +109,7 @@ const Map: React.FC<Props> = () => {
       {
         dimension: 0,
         inRange: {
-          color: [ "#0f0", "#4575b4", "#74add1", "#f46d43", "#00f"],
+          color: ["#0f0", "#4575b4", "#74add1", "#f46d43", "#00f"],
         },
         pieces: [
           { min: 10000, label: "10000以上" },

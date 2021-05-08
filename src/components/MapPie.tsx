@@ -42,7 +42,7 @@ const dataPie: any = [
   { value: 310, name: "31-40岁" },
   { value: 234, name: "41-50岁" },
   { value: 135, name: "51-60岁" },
-  { value: 1548, name: "61岁以上"},
+  { value: 1548, name: "61岁以上" },
   { value: 542, name: "未标明" },
 ];
 const Map: React.FC<Props> = () => {
@@ -109,7 +109,7 @@ const Map: React.FC<Props> = () => {
         type: "pie",
         radius: ["50%", "70%"],
         avoidLabelOverlap: false,
-         // 是否显示环形中间的文字formatter
+        // 是否显示环形中间的文字formatter
         label: {
           show: false,
           position: "center", // 文字再环形中间还是两边: right/left...
@@ -117,7 +117,6 @@ const Map: React.FC<Props> = () => {
           //   console.log('params*****', params)
           // }
           formatter: "{b}\n{c} ({d}%)",
-          
         },
         // hover环形中间的文字样式
         emphasis: {
