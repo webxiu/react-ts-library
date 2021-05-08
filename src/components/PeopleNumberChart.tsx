@@ -6,6 +6,51 @@ const EchartsOptions = (
   seriesData: number[]
 ): EChartOption => {
   const COLOR_MAP = ["#2d85f0", "#ffbc32", "#0aa858", "#f60", "#f4433c"];
+  const rich: any = {
+    one: {
+      color: "#f5ed00",
+      fontSize: 25,
+      padding: [1.5, 0],
+      align: "center",
+    },
+    two: {
+      color: "#c58029",
+      fontSize: 20,
+      padding: [1.5, 0],
+      align: "center",
+    },
+    three: {
+      color: "#fdaaeb",
+      align: "center",
+      fontSize: 32,
+      padding: [1.5, 0],
+    },
+    four: {
+      color: "#EF3E5A",
+      fontSize: 25,
+      align: "center",
+    },
+    five: {
+      color: "#f60",
+      fontSize: 20,
+      align: "center",
+    },
+    six: {
+      color: "#f0f",
+      fontSize: 20,
+      align: "center",
+    },
+  };
+
+  const dataPie: any = [
+    { value: 335, name: "18-30岁" },
+    { value: 310, name: "31-40岁" },
+    { value: 234, name: "41-50岁" },
+    { value: 135, name: "51-60岁" },
+    { value: 1548, name: "61岁以上" },
+    { value: 542, name: "未标明" },
+  ];
+
   const level = [
     "一级：[80，90]",
     "二级：[50，90)",
@@ -59,21 +104,6 @@ const EchartsOptions = (
       //   return `姓名：${params[0].name}<br/>性别：`;
       // }
     },
-    graphic: {
-      elements: [
-        {
-          type: "text",
-          right: 100,
-          top: 140,
-          z: -10,
-          style: {
-            text: level.join("\n\n\n\n\n\n"),
-            font: '16px "STHeiti", sans-serif',
-            fill: "#f00",
-          },
-        },
-      ],
-    },
     series: [
       {
         data: seriesData,
@@ -92,15 +122,20 @@ const EchartsOptions = (
         },
         label: {
           show: true,
-          position: "inside",
-          textStyle: { color: "#fff", fontSize: 16 },
-          formatter: (params: any) => params.value + "人",
+          position: ["40%", "50%"],
+          textStyle: { color: "#00f", fontSize: 16 },
+          formatter: (params: any) => {
+            let str = "";
+            for (let i = 0; i < 100; i++) {
+              str += "\t";
+            }
+            return params.value + "人" + str + level[params.dataIndex];
+          },
         },
       },
     ],
   };
 };
-
 const Wrap: React.FC = (props) => {
   const EcharsRef = useRef<HTMLDivElement>(null);
   const [EchartsInstance, setEchartsInstance] = useState<ECharts | null>(null);

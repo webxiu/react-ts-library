@@ -6,58 +6,71 @@ const EchartsOptions = (
   seriesData: number[]
 ): EChartOption => {
   const COLOR_MAP = ["#2d85f0", "#ffbc32", "#0aa858", "#f60", "#f4433c"];
-
   return {
+    title: {
+      text: "按频次均等统计",
+      top: "10",
+      left: "50%",
+      textStyle: { color: "#fff" },
+    },
     xAxis: {
       name: "出现频次",
       type: "category",
       data: xAxisData,
-      axisTick: {
-        show: false,
-        alignWithLabel: true,
-      },
+      axisTick: { show: false, alignWithLabel: true },
       axisLine: {
         symbol: ["none", "arrow"],
+        symbolOffset: [0, 25],
         lineStyle: {
-          color: "#44444F",
+          color: "#797979",
           width: 2,
+          shadowOffsetX: 22, //利用阴影进行延长
+          shadowColor: "#797979",
         },
+      },
+      nameTextStyle: {
+        fontSize: 14,
+        padding: [30, 0, 0, 15], // 四个数字分别为上右下左与原位置距离
       },
     },
     yAxis: {
       name: "人数",
       type: "value",
-      axisTick: {
-        show: true,
-      },
-      max: function (value) {
-        return value.max + 0.1 * value.max;
-      },
+      axisTick: { show: false },
+      // max: function (value) {
+      //   return value.max + 0.1 * value.max;
+      // },
       axisLine: {
         symbol: ["none", "arrow"],
+        symbolOffset: [0, 25],
         lineStyle: {
-          color: "#44444F",
+          color: "#797979",
           width: 2,
+          shadowOffsetY: -20, //利用阴影进行延长坐标轴箭头
+          shadowColor: "#797979",
         },
       },
       splitLine: {
         show: true,
-        lineStyle: {
-          type: "dashed",
-          color: "#44444F", //44444F
-        },
+        lineStyle: { type: "dashed", color: "#44444F" }, // 横虚线
       },
       minInterval: 1,
+      nameTextStyle: {
+        fontSize: 14,
+        padding: [0, 45, 10, 0], // 坐标轴名称位置
+      },
     },
-    textStyle: {
-      color: "#00f",
+    grid: {
+      // 图表到边的距离
+      left: "3%",
+      right: "20%",
+      bottom: "8%",
+      containLabel: true,
     },
+    textStyle: { color: "#00f" }, // 坐标轴字体颜色
     tooltip: {
       trigger: "axis",
-      axisPointer: {
-        // 坐标轴指示器，坐标轴触发有效
-        type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
-      },
+      axisPointer: { type: "shadow" }, // 坐标轴指示器，默认为直线，可选为：'line' | 'shadow'
       // formatter: (params: { name: string; dataIndex: number; value: number }[]) => {
       //   /**
       //    * 姓名：
@@ -69,32 +82,6 @@ const EchartsOptions = (
       //   // const gender = originData[params[0].dataIndex].gender;
       //   return `姓名：${params[0].name}<br/>性别：`;
       // }
-    },
-    legend: {
-      show: true,
-      //   orient: 'vertical',
-      //   data: ['18-30岁', '31-40岁', '41-50岁', '51-60岁', '61岁以上', '未标明'],
-      //   top: '12%',
-      //   right: '50',
-      //   itemGap: 15,
-      //   icon: 'square',
-      //   textStyle: {
-      //     // 边栏字体颜色
-      //     color: 'rgba(100, 100, 100, 1)',
-      //     fontSize: 16,
-      //     rich: rich
-      //   },
-      //   formatter: function (name: any) {
-      //     // console.log("name==", name);
-      //     let str: string = '';
-      //     dataPie.forEach((item: any, i: number) => {
-      //       if (item.name === name) {
-      //         const color = Object.keys(rich)[i];
-      //         str += `${item.name} | {${color}|${item.value}}%`;
-      //       }
-      //     });
-      //     return str;
-      //   }
     },
     series: [
       {
@@ -120,7 +107,7 @@ const EchartsOptions = (
           textStyle: {
             padding: [4, 5, 0, 5],
             color: "#000",
-            backgroundColor: "#fff",
+            backgroundColor: "#0f0",
             fontSize: 16,
           },
         },
@@ -141,7 +128,7 @@ const Wrap: React.FC = (props) => {
   useEffect(() => {
     if (!EchartsInstance) return;
     const x = ["0-10次", "10-20次", "20-30次", "30-40次", "40-50次"];
-    const y = [120, 200, 150, 80, 70, 110, 130];
+    const y = [120, 200, 150, 80, 70];
     EchartsInstance.setOption(EchartsOptions(x, y));
   }, [EchartsInstance]);
 
