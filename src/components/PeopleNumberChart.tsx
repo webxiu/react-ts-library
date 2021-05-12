@@ -57,6 +57,7 @@ const EchartsOptions = (
     "三级：[45，50)",
     "四级：[20，45)",
     "五级：[0，20)",
+    "五级：[0，20)",
   ];
 
   return {
@@ -66,13 +67,22 @@ const EchartsOptions = (
       top: "10",
     },
     xAxis: {
-      show: false,
+      show: true,
       type: "value",
+      splitLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: {
+        padding: [-18, 30, 20, 6],
+        formatter: (params: any) => {
+          return params === 0 ? 0 : "";
+        },
+      },
     },
     yAxis: {
       name: "频次",
       type: "category",
       data: yAxisData,
+
       axisTick: { show: false },
       max: function (value) {
         return value.max + 0.1 * value.max;
@@ -82,7 +92,10 @@ const EchartsOptions = (
         symbol: ["none", "arrow"],
         lineStyle: { color: "#44444F", width: 2 },
       },
-
+      axisLabel: {
+        lineHeight: 80,
+        verticalAlign: "bottom",
+      },
       splitLine: {
         show: false,
       },
@@ -147,7 +160,7 @@ const Wrap: React.FC = (props) => {
 
   useEffect(() => {
     if (!EchartsInstance) return;
-    const x = [0, 20, 45, 50, 80, 90];
+    const x = [10, 20, 45, 50, 80, 91];
     const y = [18, 18, 18, 18, 18];
     EchartsInstance.setOption(EchartsOptions(x, y));
   }, [EchartsInstance]);
