@@ -58,6 +58,7 @@ const data: { name: string; value: number }[] = [
   { name: "香港", value: 70 },
   { name: "澳门", value: 2 },
 ];
+const aaa = [111, 222, 333];
 const Map: React.FC<Props> = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
@@ -86,24 +87,57 @@ const Map: React.FC<Props> = () => {
       },
     },
     graphic: {
-      elements: [
-        {
+      elements: aaa.map((item, index) => {
+        return {
           type: "text",
           right: 100,
-          top: 200,
+          top: 100 * (index + 1),
           z: -10,
           style: {
-            text: [
-              "自定义文字自定义文字",
-              "自定义文字自定义文字",
-              "自定义文字自定义文字",
-              "自定义文字自定义文字",
-              "自定义文字",
-            ].join("\n"),
+            text: ["1111111自定义文字", "自定义文字", `${item}=`].join("\n"),
             font: "14px Microsoft YaHei",
           },
-        },
-      ],
+          onclick: (params: any) => {
+            console.log(`=item====>`, item);
+            console.log(`=====>`, params);
+          },
+        };
+      }),
+      // [
+      //   {
+      //     type: "text",
+      //     right: 100,
+      //     top: 100,
+      //     z: -10,
+      //     style: {
+      //       text: ["1111111自定义文字", "自定义文字"].join("\n"),
+      //       font: "14px Microsoft YaHei",
+      //     },
+      //   },
+      //   {
+      //     type: "text",
+      //     right: 100,
+      //     top: 200,
+      //     z: -10,
+      //     style: {
+      //       text: ["2222222222自定义文字", "自定义文字"].join("\n"),
+      //       font: "14px Microsoft YaHei",
+      //     },
+      //     onclick: (params: any) => {
+      //       console.log(`=====>`, params);
+      //     },
+      //   },
+      //   {
+      //     type: "text",
+      //     right: 100,
+      //     top: 300,
+      //     z: -10,
+      //     style: {
+      //       text: ["333333333333333自定义文字", "自定义文字"].join("\n"),
+      //       font: "14px Microsoft YaHei",
+      //     },
+      //   },
+      // ],
     },
     visualMap: [
       {
@@ -201,7 +235,8 @@ const Map: React.FC<Props> = () => {
       document.getElementById("china") as HTMLDivElement
     );
     setEchartsInstance(mychart);
-    echartsInstance?.on("click", (params: any) => {
+    echartsInstance?.on("click", (params: any, index: number) => {
+      console.log(`index`, index);
       console.log("params", params);
 
       if (params?.name in province) {

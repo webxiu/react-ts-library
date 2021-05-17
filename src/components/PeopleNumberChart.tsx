@@ -74,6 +74,7 @@ const EchartsOptions = (
       axisLabel: {
         padding: [-18, 30, 20, 6],
         formatter: (params: any) => {
+          console.log(`params`, params);
           return params === 0 ? 0 : "";
         },
       },
