@@ -1,11 +1,8 @@
-import React from 'react'
+import Progress from "../../components/Progress";
+import React from "react";
 
 const Form = () => {
-    return (
-        <div>
-            Message
-        </div>
-    )
-}
+  return <Progress></Progress>;
+};
 
-export default Form
+export default Form;
