@@ -136,6 +136,55 @@ const Wrap: React.FC = () => {
       ],
     });
 
+    // 配置右键菜单(覆盖默认菜单)
+    logicflow.extension.menu.setMenuConfig({
+      nodeMenu: [
+        {
+          text: "删除",
+          callback(node: any) {
+            // node为该节点数据
+            logicflow.deleteNode(node.id);
+          },
+        },
+        {
+          text: "分享啊",
+          callback() {
+            alert("分享成功！");
+          },
+        },
+        {
+          text: "属性",
+          callback(node: any) {
+            alert(`
+              节点id：${node.id}
+              节点类型：${node.type}
+              节点坐标：(x: ${node.x}, y: ${node.y})`);
+          },
+        },
+      ],
+      edgeMenu: [
+        {
+          text: "属性",
+          callback(edge: any) {
+            alert(`
+              边id：${edge.id}
+              边类型：${edge.type}
+              边坐标：(x: ${edge.x}, y: ${edge.y})
+              源节点id：${edge.sourceNodeId}
+              目标节点id：${edge.targetNodeId}`);
+          },
+        },
+      ],
+      graphMenu: [
+        {
+          text: "分享",
+          callback() {
+            alert("分享成功98！");
+          },
+        },
+      ],
+    });
+
     // 添加导航栏
     logicflow.extension.control.addItem({
       iconClass: "custom-minimap",
