@@ -13,6 +13,7 @@ import Person from "./pages/person";
 import { Redirect } from "react-router";
 import Role from "./pages/role";
 import Table from "./pages/table";
+import FlowChart from "./pages/flowChart";
 
 const App: FC = () => {
   return (
@@ -32,6 +33,7 @@ const App: FC = () => {
                 <Route path="/role" component={Role} />
                 <Route path="/mssage" component={Message} />
                 <Route path="/permission" component={Permission} />
+                <Route path="/flowChart" component={FlowChart} />
                 <Route component={NotFound} />
               </Switch>
             )}
